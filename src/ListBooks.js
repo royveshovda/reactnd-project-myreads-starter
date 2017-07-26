@@ -6,11 +6,12 @@ import ShowBook from './ShowBook'
 
 class ListBooks extends Component {
   static propTypes = {
-    books: PropTypes.array.isRequired
+    books: PropTypes.array.isRequired,
+    onMove: PropTypes.func.isRequired
   }
 
   render() {
-    const { books } = this.props
+    const { books, onMove } = this.props
 
     let currentlyReadingListing = books.filter((book) => book.shelf === 'currentlyReading')
     currentlyReadingListing.sort(sortBy('title'))
@@ -34,7 +35,7 @@ class ListBooks extends Component {
                 <ol className="books-grid">
                   {currentlyReadingListing.map((book) => (
                     <li key={book.id}>
-                      <ShowBook book={book} />
+                      <ShowBook book={book} onMove={onMove} />
                     </li>
                   ))}
                 </ol>
@@ -46,7 +47,7 @@ class ListBooks extends Component {
                 <ol className="books-grid">
                   {wantToReadListing.map((book) => (
                     <li key={book.id}>
-                      <ShowBook book={book} />
+                      <ShowBook book={book} onMove={onMove} />
                     </li>
                   ))}
                 </ol>
@@ -58,7 +59,7 @@ class ListBooks extends Component {
                 <ol className="books-grid">
                   {readListing.map((book) => (
                     <li key={book.id}>
-                      <ShowBook book={book} />
+                      <ShowBook book={book} onMove={onMove} />
                     </li>
                   ))}
                 </ol>
