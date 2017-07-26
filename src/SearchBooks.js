@@ -19,7 +19,6 @@ class SearchBooks extends Component {
     this.setState({query: newQuery})
     this.props.onSearch(newQuery, 100).then((books) => {
       if (books.length > 0){
-        console.log(books)
         this.setState({foundBooks: books})
       } else {
         this.setState({foundBooks: []})
