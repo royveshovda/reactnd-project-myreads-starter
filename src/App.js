@@ -11,6 +11,7 @@ class BooksApp extends React.Component {
 
     this.onMove = this.onMove.bind(this)
   }
+
   state = {
     books: []
   }
@@ -37,7 +38,7 @@ class BooksApp extends React.Component {
           <ListBooks books={this.state.books} onMove={this.onMove} />
         )} />
         <Route path="/search" render={() => (
-          <SearchBooks />
+          <SearchBooks onSearch={BooksAPI.search} onMove={this.onMove} />
         )} />
       </div>
     )
