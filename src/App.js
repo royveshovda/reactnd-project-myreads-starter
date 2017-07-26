@@ -28,7 +28,12 @@ class BooksApp extends React.Component {
 
   onMove(book, newShelf) {
     console.log(book.title + " : " + newShelf)
-    BooksAPI.update(book, newShelf).then(() => this.getAllBooks())
+    BooksAPI.update(book, newShelf).then(() => {
+      book.shelf = newShelf
+      this.setState(state => ({
+        books: state.books.filter(b => b.id !== book.id).concat([book])
+      }))
+    })
   }
 
   render() {
