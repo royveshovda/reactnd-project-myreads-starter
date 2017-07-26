@@ -10,20 +10,18 @@ class BooksApp extends React.Component {
     super(props)
 
     this.onMove = this.onMove.bind(this)
+    this.getBookState = this.getBookState.bind(this)
+    this.onSearchBooks = this.onSearchBooks.bind(this)
   }
 
   state = {
     books: []
   }
 
-  getAllBooks() {
+  componentDidMount() {
     BooksAPI.getAll().then((books) => {
       this.setState({books})
     })
-  }
-
-  componentDidMount() {
-    this.getAllBooks()
   }
 
   onMove(book, newShelf) {
@@ -36,6 +34,32 @@ class BooksApp extends React.Component {
     })
   }
 
+  getBookState(bookId) {
+    const book = this.state.books.filter(b => b.id === bookId)
+    if (book.length === 1){
+      return book[0].shelf
+    }else{
+      return 'none'
+    }
+  }
+
+  onSearchBooks(query, max) {
+    return new Promise((resolve, reject) => {
+      BooksAPI.search(query, max).then(books => {
+        if (books.length > 0){
+          const enrichedBooks = books.map(book => {
+            book.shelf = this.getBookState(book.id)
+            return book
+          })
+          resolve(enrichedBooks)
+        }else{
+          resolve([])
+        }
+      })
+    })
+
+  }
+
   render() {
     return (
       <div className="app">
@@ -43,7 +67,7 @@ class BooksApp extends React.Component {
           <ListBooks books={this.state.books} onMove={this.onMove} />
         )} />
         <Route path="/search" render={() => (
-          <SearchBooks onSearch={BooksAPI.search} onMove={this.onMove} />
+          <SearchBooks onSearch={this.onSearchBooks} onMove={this.onMove} />
         )} />
       </div>
     )
